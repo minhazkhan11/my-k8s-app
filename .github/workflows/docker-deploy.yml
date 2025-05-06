@@ -1,0 +1,35 @@
+name: Docker CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout code from the repo
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Log in to DockerHub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.minhazkhan }}
+          password: ${{ secrets.REDACTED }}
+
+      # Step 3: Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t minhazkhan/my-flask-app:latest .
+
+      # Step 4: Push the image to Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push minhazkhan/my-flask-app:latest
+
+      # Step 5: Deploy the image to Kubernetes cluster (if needed)
+      # Add your Kubernetes deploy commands here (if using kubectl or helm)
+
